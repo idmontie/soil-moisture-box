@@ -1,5 +1,7 @@
 # Soil Moisture Box
 
+Use a Raspberry Pi Zero to monitor soil moisture and use Pushbullet to alert when soil is dry
+
 ## General Design Goal
 
 ```txt
