@@ -1,0 +1,2 @@
+dotenv==0.0.5
+pushbullet.py==0.9.1
