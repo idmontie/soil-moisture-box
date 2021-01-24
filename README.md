@@ -1,4 +1,4 @@
-# Soil Humidity Box
+# Soil Moisture Box
 
 ## General Design Goal
 
@@ -6,7 +6,7 @@
 On Raspberry Pi boot, do the following:
     Run this script with forever
         Every 10 seconds, do the following:
-            Check soil humidity sensor
+            Check soil moisture sensor
                 If was wet and now dry AND has not sent message in last day, emit info
 
 On message emit, send a Pushbullet note.
@@ -31,7 +31,7 @@ ping google.com
 
 ```bash
 # Test the launch script
-cd ./soil-humidity-box
+cd ./soil-moisture-box
 bash ./install.sh
 bash ./launch.sh
 ```
@@ -50,7 +50,7 @@ sudo systemctl edit --force --full soil.service
     Type=simple
     User=pi
     WorkingDirectory=/home/pi/
-    ExecStart=bash ./soil-humidity-box/launch.sh
+    ExecStart=bash ./soil-moisture-box/launch.sh
 [Install]
     WantedBy=multi-user.target
  

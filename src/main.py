@@ -7,7 +7,7 @@ import os
 
 dotenv = Dotenv('.env')
 
-HUMIDITY_PIN = int(dotenv['HUMIDITY_PIN'])
+MOISTURE_PIN = int(dotenv['MOISTURE_PIN'])
 MESSAGE_INTERVAL_HOURS = int(dotenv['MESSAGE_INTERVAL_HOURS'])
 LOOP_INTERVAL = int(dotenv['LOOP_INTERVAL'])
 digital_input = None
@@ -17,10 +17,10 @@ last_message_sent = datetime.now() - timedelta(hours=MESSAGE_INTERVAL_HOURS)
 pb = Pushbullet(dotenv['PUSHBULLET_API_KEY'])
 
 def init_pins():
-    global digital_input, HUMIDITY_PIN
-    digital_input = DigitalInputDevice(HUMIDITY_PIN)
+    global digital_input, MOISTURE_PIN
+    digital_input = DigitalInputDevice(MOISTURE_PIN)
 
-def is_soil_humid():
+def is_soil_moist():
     '''
     Returns true (digital input is low) if the soil is wet
     Returns false (gitial input is high) if the soil is dry
@@ -36,7 +36,7 @@ def loop():
     global current_soil, last_message_sent, MESSAGE_INTERVAL_HOURS
     # TODO remind the user to change the battery
 
-    next_soil = is_soil_humid()
+    next_soil = is_soil_moist()
 
     if (current_soil != next_soil and not next_soil):
         now = datetime.now()
