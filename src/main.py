@@ -1,5 +1,5 @@
 from dotenv import Dotenv
-from gpiozero import DigitalInputDevice
+from gpiozero import DigitalInputDevice, DigitalOutputDevice
 from pushbullet import Pushbullet
 from datetime import datetime, timedelta
 from time import sleep
@@ -8,17 +8,20 @@ import os
 dotenv = Dotenv('.env')
 
 MOISTURE_PIN = int(dotenv['MOISTURE_PIN'])
+VOLTAGE_PIN = int(dotenv['VOLTAGE_PIN'])
 MESSAGE_INTERVAL_HOURS = int(dotenv['MESSAGE_INTERVAL_HOURS'])
 LOOP_INTERVAL = int(dotenv['LOOP_INTERVAL'])
 digital_input = None
+digital_output = None
 current_soil = False
 last_message_sent = datetime.now() - timedelta(hours=MESSAGE_INTERVAL_HOURS)
 
 pb = Pushbullet(dotenv['PUSHBULLET_API_KEY'])
 
 def init_pins():
-    global digital_input, MOISTURE_PIN
+    global digital_input, digital_output, MOISTURE_PIN, VOLTAGE_PIN
     digital_input = DigitalInputDevice(MOISTURE_PIN)
+    digital_output = DigitalOutputDevice(VOLTAGE_PIN)
 
 def is_soil_moist():
     '''
@@ -26,7 +29,13 @@ def is_soil_moist():
     Returns false (gitial input is high) if the soil is dry
     '''
     global digital_input
-    return not digital_input.value
+
+    digital_output.on()
+    sleep(1)
+    current_value = digital_input.value
+    digital_output.off()
+
+    return not current_value
 
 def emit_message():
     print('water your plants')
@@ -38,7 +47,7 @@ def loop():
 
     next_soil = is_soil_moist()
 
-    if (current_soil != next_soil and not next_soil):
+    if (not next_soil):
         now = datetime.now()
         difference = now - last_message_sent
         should_send_message = difference.total_seconds() > MESSAGE_INTERVAL_HOURS * 60 * 60

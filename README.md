@@ -72,6 +72,42 @@ sudo reboot
 
 9. Remember to secure your device using `passwd`.
 
+## Power Saving Tips
+
+A few power saving tips.
+
+Disable HDMI:
+
+```sh
+sudo /opt/vc/bin/tvservice -o
+```
+
+Add the following to `/boot/config.txt`:
+
+```txt
+arm_freq_min=250
+core_freq_min=100
+sdram_freq_min=150
+over_voltage_min=0
+
+##turn off mainboard LEDs
+dtoverlay=act-led
+
+##disable ACT LED
+dtparam=act_led_trigger=none
+dtparam=act_led_activelow=off
+  
+##disable PWR LED
+dtparam=pwr_led_trigger=none
+dtparam=pwr_led_activelow=off
+
+##turn on/ off bluetooth
+dtoverlay=disable-bt
+
+##turn off audio
+dtparam=audio=off
+```
+
 ## Additional Resources
 
 - [TechCoil Reasoing Soil Moisture on MCP3008 chip](https://www.techcoil.com/blog/how-to-read-soil-moisture-level-with-raspberry-pi-and-a-yl-69-fc-28-moisture-sensor/)
